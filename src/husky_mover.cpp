@@ -1,15 +1,20 @@
 #include "ros/ros.h"
 #include "geometry_msgs/Twist.h"
+#include "nav_msgs/Odometry.h"
 #include <sstream>
 
 ros::Publisher velocity_publisher;
 ros::Subscriber pose_subscriber;
+nav_msgs::Odometry husky_pose;
+
 
 void move (double speed, double distance, bool isForward);
 void rotate (double angular_speed, double angle, bool clockwise);
 
 double degrees2radians(double angle_in_degrees);
 double setDesiredOrientation(double desired_angle_radians);
+
+void poseCallback(const nav_msgs::Odometry::ConstPtr & pose_message);
 
 const double PI = 3.14159265359;
 
@@ -27,7 +32,10 @@ int main (int argc, char **argv)
 
                                                         
     velocity_publisher = n.advertise<geometry_msgs::Twist>("/twist_marker_server/cmd_vel",100);
+    pose_subscriber = n.subscribe("odom",10,poseCallback);
     
+    // uncomment the below command to try v1.0 and v1.2.
+    /*
     cout << "enter speed!";
     cin >> speed;
     cout << "enter distance";
@@ -43,6 +51,14 @@ int main (int argc, char **argv)
     cout<<"clockwise? - ";
     cin>>clockwise;
     rotate(degrees2radians(angular_speed), degrees2radians(angle),clockwise);
+    */
+
+    setDesiredOrientation(degrees2radians(120));
+    ros::Rate loop_rate(0.5);
+    loop_rate.sleep();
+    setDesiredOrientation(degrees2radians(-60));
+    loop_rate.sleep();
+    setDesiredOrientation(degrees2radians(0));
 
     ros::spin();
 
@@ -126,32 +142,16 @@ double degrees2radians(double angle_in_degrees){
     return angle_in_degrees*PI/180.0;
 }
 
-/*double setDesiredOrientation(double desired_angle_radians){
-    double relative_angle_radians = desired_angle_radians - 
-} */
+double setDesiredOrientation(double desired_angle_radians){
+    double relative_angle_radians = desired_angle_radians - husky_pose.twist.twist.angular.z;
+    bool clockwise = ((relative_angle_radians<0)?true:false);
+    cout<<desired_angle_radians<<","<<husky_pose.twist.twist.angular.z<<","<<relative_angle_radians;
+    rotate(abs(relative_angle_radians), abs(relative_angle_radians),clockwise);
+    return 0;
+} 
 
-
-/*
-#include "ros/ros.h"
-#include "geometry_msgs/Twist.h"
-#include "stdlib.h"
-
-int main (int argc, char **argv)
-{
-    ros::init(argc, argv,"husky_mover");
-    ros::NodeHandle n;
-    
-    //topic - /twist_marker_server/cmd_vel - geometry_msgs/Twist
-    ros::Publisher velocity_publisher = n.advertise<geometry_msgs::Twist>("/twist_marker_server/cmd_vel ",10);
- 
-    
-    while(ros::ok()) {
-    geometry_msgs::Twist msg;
-    msg.linear.x=10.0;
-    msg.linear.y=1.0;
-    msg.angular.z=1.0;
-    velocity_publisher.publish(msg);
-    ros::Duration(1.0).sleep();
-    }
+void poseCallback(const nav_msgs::Odometry::ConstPtr & pose_message){
+    husky_pose.twist.twist.linear.x = pose_message->twist.twist.linear.x;
+    husky_pose.twist.twist.linear.y = pose_message->twist.twist.linear.y;
+    husky_pose.twist.twist.angular.z = pose_message->twist.twist.angular.z;
 }
-*/
