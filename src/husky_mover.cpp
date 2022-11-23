@@ -3,11 +3,13 @@
 #include <sstream>
 
 ros::Publisher velocity_publisher;
+ros::Subscriber pose_subscriber;
 
 void move (double speed, double distance, bool isForward);
 void rotate (double angular_speed, double angle, bool clockwise);
 
 double degrees2radians(double angle_in_degrees);
+double setDesiredOrientation(double desired_angle_radians);
 
 const double PI = 3.14159265359;
 
@@ -23,8 +25,8 @@ int main (int argc, char **argv)
     double angular_speed,angle;
     bool clockwise;
 
-                                                        //name of the topic is here
-    velocity_publisher = n.advertise<geometry_msgs::Twist>("/twist_marker_server/cmd_vel",10);
+                                                        
+    velocity_publisher = n.advertise<geometry_msgs::Twist>("/twist_marker_server/cmd_vel",100);
     
     cout << "enter speed!";
     cin >> speed;
@@ -124,7 +126,9 @@ double degrees2radians(double angle_in_degrees){
     return angle_in_degrees*PI/180.0;
 }
 
-
+/*double setDesiredOrientation(double desired_angle_radians){
+    double relative_angle_radians = desired_angle_radians - 
+} */
 
 
 /*
@@ -137,7 +141,7 @@ int main (int argc, char **argv)
     ros::init(argc, argv,"husky_mover");
     ros::NodeHandle n;
     
-                                                            //name of the topic is here
+    //topic - /twist_marker_server/cmd_vel - geometry_msgs/Twist
     ros::Publisher velocity_publisher = n.advertise<geometry_msgs::Twist>("/twist_marker_server/cmd_vel ",10);
  
     
