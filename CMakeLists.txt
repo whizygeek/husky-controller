@@ -138,7 +138,7 @@ include_directories(
 
 add_executable(husky_mover src/husky_mover.cpp)
 target_link_libraries(husky_mover ${catkin_LIBRARIES})
-#add_dependencies(robot_mover_node husky_cpp)
+#add_dependencies(husky husky_mover_gencpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
