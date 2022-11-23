@@ -2,7 +2,7 @@
 
 ## NOTE:- I have noted in the husky_mover.cpp to uncomment the section to try all the version of this programm at once.
 
-## Release v1.3 - program is trained to rotate angularly using relative angle.
+## Release v1.3 - program is trained to rotate angularly using relative angle. Moreover, subscriber is also introduced (specifically to get the relative angle with respect to the current angle of the husky)
 ### All other settings/dependencies (of CMakeLists.txt and package.xml) will remain same as per previous v1.0.
 
 ## Release v1.2 - program will ask for the values of angular velocity (degree/secs), angle (degrees), and angle orientation (clockwise/anti-clockwise.)
