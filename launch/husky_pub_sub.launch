@@ -1,0 +1,4 @@
+<launch>
+<node name="husky_mover" pkg="husky_mover" type="husky_mover" output="screen"> </node>
+<node name="odom_sub" pkg="husky_mover" type="odom_sub" output="screen"> </node>
+</launch>

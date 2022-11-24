@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   geometry_msgs
+  nav_msgs
   message_generation
 )
 
@@ -106,7 +107,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES husky_mover
-CATKIN_DEPENDS roscpp rospy geometry_msgs message_generation
+CATKIN_DEPENDS roscpp rospy geometry_msgs nav_msgs message_generation
 #  DEPENDS system_lib
 )
 
@@ -139,6 +140,10 @@ include_directories(
 add_executable(husky_mover src/husky_mover.cpp)
 target_link_libraries(husky_mover ${catkin_LIBRARIES})
 #add_dependencies(husky husky_mover_gencpp)
+
+add_executable(odom_sub src/odom_sub.cpp)
+target_link_libraries(odom_sub ${catkin_LIBRARIES})
+add_dependencies(odom_sub nav_msgs_generate_messages_cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
