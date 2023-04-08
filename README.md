@@ -2,11 +2,17 @@
 
 ## Installation guide
 $ sudo apt install ros-noetic-gazebo-ros-* ros-noetic-lms1xx
+
 $ cd ~/catkin_ws/src   
+
 $ git clone https://github.com/husky/husky.git
+
 $ cd ..
+
 $ rosdep install --from-path src --ignore-src  
+
 $ catkin build
+
 $ source devel/setup.bash
 
 ## Run simulation
